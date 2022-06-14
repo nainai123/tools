@@ -1,0 +1,216 @@
+ preprocess: bool, default = True
+当设置为False时，除train_test_split外，不应用任何转换  和自定义转换传入' ' custom_pipeline ' '参数。 数据必须  准备建模(没有缺失值，没有日期，分类数据编码)，  当preprocess设置为False时。 
+
+imputation_type: str, default = 'simple' 
+要使用的填补类型。可以是“简单”或“迭代”。
+
+ iterative_imputation_iters: int, default = 5
+的迭代次数。 当' ' imputation_type ' '不是'iterative'时被忽略。  
+
+categorical_features: list of str, default = None
+如果推断的数据类型不正确或静默参数设置为True，  Categorical_features参数可用于覆盖或定义数据类型。  它接受具有分类列名的字符串列表。  
+
+ categorical_imputation: str, default = 'constant'
+分类特征中缺失的值用常量'not_available'进行计算  价值。 另一个可用选项是“mode”。  
+
+categorical_iterative_imputer: str, default = 'lightgbm'
+分类特征中缺失值迭代估算的估计器。  当' ' imputation_type ' '不是'iterative'时被忽略。
+
+ordinal_features: dict, default = None
+当分类特征包含多个级别时，可以将其压缩为更少的级别使用此参数的级别。它需要一个列名称为是绝对的。
+
+ high_cardinality_method: str, default = 'frequency'
+具有高基数的分类特征被替换为
+培训数据集中出现的每个级别的值。其他可用方法是“聚类”，它在统计上训练K-Means聚类算法属性，并将特征的原始值替换为群集标签。通过优化Calinski-Harabasz确定集群数量和轮廓标准。
+
+ numeric_features: list of str, default = None
+如果推断的数据类型不正确或静默参数设置为True，  Numeric_features参数可用于覆盖或定义数据类型。  它接受一个列名称为数字的字符串列表。  
+
+ numeric_imputation: str, default = 'mean'
+数值特征中的缺失值用特征的“均值”值来计算  在训练数据集中。 另一个可用选项是'median'或'zero'。  
+
+ numeric_iterative_imputer: str, default = 'lightgbm'
+数值特征中缺失值迭代估算的估计器。 当' ' imputation_type ' '设置为'simple'时将被忽略。  
+
+date_features: list of str, default = None
+如果推断的数据类型不正确或静默参数设置为True，  Date_features参数可以用来覆盖或定义数据类型。 这需要 列名称为DateTime的字符串列表。  
+
+ ignore_features: list of str, default = None
+Ignore_features参数可用于在模型训练期间忽略特性。  它接受一个字符串列表，其中包含将被忽略的列名。  
+
+ normalize: bool, default = False
+当设置为True时，它通过将数值特性缩放到给定值来转换它们  的范围内。 缩放类型由参数' ' normalize_method ' '定义。  
+
+ normalize_method: str, default = 'zscore'
+定义缩放的方法。 默认情况下，normalize方法设置为'zscore'  标准的zscore计算为z = (x - u) / s。当' ' normalize ' '时忽略  是不正确的。 其他选项有:  
+
+transformation: bool, default = False
+当设置为True时，它应用幂变换使数据更接近高斯。  转换的类型由' ' transformation_method ' '参数定义。
+
+  transformation_method: str, default = 'yeo-johnson'
+定义用于转换的方法。 默认情况下，转换方法为  设置为“yeo-johnson”。 转换的另一个可用选项是'quantile'。  当' ' transformation ' '不是True时被忽略。 
+
+ handle_unknown_categorical: bool, default = True
+当设置为True时，不可见数据中的未知分类级别将被替换为  训练数据集中学习到的最频繁或最不频繁级别。
+
+ unknown_categorical_method: str, default = 'least_frequent'  
+用于替换不可见数据中未知分类水平的方法。 方法可以  设置为' least_frequency '或' most_frequency '。  
+
+  pca: bool, default = False
+
+当设置为True时，将应用降维来将数据投影到  使用' ' pca_method ' '参数中定义的方法的低维空间。  
+
+pca_method: str, default = 'linear'
+“线性”方法执行使用奇异值分解。 其他选项:  
+- kernel:通过使用RVF内核降维。  
+-增量:当数据集太大时，替换“线性”pca。 
+
+ pca_components: int or float, default = None
+要保留的组件数量。 如果pca_components是一个浮点数，它将被视为  信息保留的目标百分比。 当pca_components为整数时  它被视为保留特性的数量。 Pca_components必须小于  
+比原始特征数量多。 当' ' pca ' '不是True时被忽略。  
+
+ignore_low_variance: bool, default = False
+当设置为True时，所有方差不显著的分类特征为  从数据中删除。 方差是使用唯一比率来计算的  值与样本数的比值，以及最常见值与的比值  
+频率是第二常见的值。
+
+
+ combine_rare_levels: bool, default = False
+当设置为True时，下面的分类特征中级别的频率百分比  
+某个阈值被组合成单个级别。  
+
+
+ rare_level_threshold: float, default = 0.1
+以下罕见类别组合的百分比分布。 忽略时  
+' combine_rare_levels ' '不为True。  
+
+
+ bin_numeric_features: list of str, default = None
+要将数值特征转换为类别特征，bin_numeric_features参数可以  被使用。 它接受一个字符串列表，其中包含要离散化的列名。 它因此，通过使用'sturges'规则来确定集群的数量，然后应用KMeans算法。 特性的原始值随后被替换为  
+集群品牌。
+
+ remove_outliers: bool, default = False
+当设置为True时，训练数据中的异常值将使用Singular移除  
+值分解。  
+
+ outliers_threshold: float, default = 0.05
+要从训练数据集中移除的异常值百分比。 忽略时  
+' remove_outliers ' '不是True。 
+
+remove_multicollinearity: bool, default = False
+当设置为True时，特性的相关性比定义的高  阈值被删除。 当两个特征高度相关时剔除与目标变量相关性较小的特征。 只有认为数字特性。  
+
+ multicollinearity_threshold: float, default = 0.9
+相关特征阈值。 忽视当“remove_multicollinearity ' ' 是不正确的。  
+
+remove_perfect_collinearity: bool, default = True
+当设置为True时，完全共线性(相关性= 1的特征)被移除  
+从数据集来看，当两个特征100%相关时，其中一个是随机的  
+从数据集中删除。 
+
+create_clusters: bool, default = False
+当设置为True时，在训练数据集中创建一个额外的特性，其中每个  
+实例被分配给一个集群。 集群的数量由  
+优化Calinski-Harabasz和Silhouette准则。  
+
+
+ cluster_iter: int, default = 20
+创建集群的迭代次数。 每次迭代代表集群  
+大小。 当' ' create_clusters ' '不是True时将被忽略。  
+
+polynomial_features: bool, default = False
+当设置为True时，将使用现有的数值特性派生出新的特性。  
+
+ polynomial_degree: int, default = 2
+多项式特征的度。 例如，如果输入样本是二维的  形式为[a, b]，次数= 2的多项式特征为:  [1 ab a^2 ab b^2] 当' '多项式al_features ' '不是True时被忽略。  
+
+ trigonometry_features: bool, default = False
+当设置为True时，将使用现有的数值特性派生出新的特性。
+
+polynomial_threshold: float, default = 0.1
+当' '多项式al_features ' '或' ' trigonometry_features ' '为True时，表示新特性  
+都是从现有的数值特性中派生出来的。 这有时也会导致  
+大的特征空间。 可以使用多项式阈值参数来处理这个问题  
+问题。 它通过使用随机森林，AdaBoost和线性的组合来实现这一点  
+相关性。 所有在百分位分布范围内的派生特征  
+被保留，其余的特征被删除。
+
+
+group_features: list or list of list, default = None
+当数据集包含具有相关特征的特性时，group_features  参数可以用于特征提取。 它接受带有的字符串列表  相关的列名。
+
+group_names: list, default = None
+在命名新特性时使用的组名称。 当group_names的长度  
+与' ' group_features ' '的长度不匹配，新特性被命名  
+依次group_1、group_2等。 当' ' group_features ' '是时，它会被忽略  
+一个也没有。  
+
+
+ feature_selection: bool, default = False
+当设置为True时，将使用组合选择特性的子集  
+各种排列重要性技术，包括随机森林，Adaboost  
+与目标变量线性相关。 子集的大小为  
+依赖于“feature_selection_threshold”参数。  
+
+feature_selection_threshold: float, default = 0.8
+用于特征选择的阈值。 当“polynomial_features”或  
+' ' feature_interaction ' '为True，建议阈值保持较低  
+避免大的特征空间。 设置一个非常低的值可能是有效的，但是  
+可能会导致不合身。  
+
+
+feature_selection_method: str, default = 'classic'
+特征选择算法。 “经典”方法使用排列特征 技术的重要性。 其他可能的值是'boruta'，使用boruta特征选择算法。  
+
+ feature_interaction: bool, default = False
+当设置为True时，新特性通过交互(a * b)所有的  数据集中的数值变量。 此特性是不可伸缩的，也可能不可伸缩在具有大特征空间的数据集上按预期工作
+
+ feature_ratio: bool, default = False
+当设置为True时，通过计算比率(a / b)创建新特性。  在数据集中的所有数值变量之间。 此特性是不可伸缩的在具有较大特征空间的数据集上可能无法正常工作。
+
+interaction_threshold: bool, default = 0.01
+与多项式阈值相似，它用于压缩new的稀疏矩阵  
+通过交互创建功能。 特征的重要性基于  
+随机森林、AdaBoost和线性相关的组合属于  
+数据集中保留定义的阈值的百分比。 剩下的功能  
+在进一步处理之前删除。  
+
+fix_imbalance: bool, default = False
+当训练数据集的目标类分布不均匀时，可以实现目标类的均衡  
+使用这个参数。 当设置为True时，SMOTE(合成少数族裔过采样  
+默认情况下，将应用于为少数类创建合成数据点。  
+
+ fix_imbalance_method: obj, default = None
+当' ' fix_imbalance ' '为True时，'imblearn'兼容'fit_resample'  
+方法可以传递。 当设置为None时，' imbllearn .over_sampling。 击杀的。  
+
+data_split_shuffle: bool, default = True
+当设置为False时，将防止'train_test_split'期间的行变换。  
+
+
+data_split_stratify: bool or list, default = False
+
+控制'train_test_split'期间的分层。 当设置为True时，将  
+按目标栏分层。 要在任何其他列上分层，请传递一个列表  
+列名。 当' ' data_split_shuffle ' '为False时将被忽略。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
