@@ -1,0 +1,3 @@
+1、上传docker文件夹到服务器
+2、给安装脚本添加执行权限  chmod +x Docker_install.sh
+3、执行脚本 sh Docker_install.sh
